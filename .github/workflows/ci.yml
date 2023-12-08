@@ -16,6 +16,9 @@ jobs:
       matrix:
         pg_version: [14, 15, 16]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
