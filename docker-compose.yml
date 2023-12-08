@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  postgres:
+    build: .
+    environment:
+      - UID=1001
+      - POSTGRES_PASSWORD=secret
+      - POSTGRESQL_SHARED_PRELOAD_LIBRARIES=pgaudit,pg_stat_statements,pg_partman_bgw
+    ports:
+      - "5432:5432"
