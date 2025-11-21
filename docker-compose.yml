@@ -6,6 +6,6 @@ services:
     environment:
       - UID=1001
       - POSTGRES_PASSWORD=secret
-      - POSTGRESQL_SHARED_PRELOAD_LIBRARIES=pgaudit,pg_stat_statements,pg_partman_bgw
+      - POSTGRESQL_SHARED_PRELOAD_LIBRARIES=pgaudit,pg_stat_statements,pg_partman_bgw,pg_jieba
     ports:
       - "5432:5432"

@@ -2,7 +2,7 @@ ARG PG_VERSION=17
 ARG PG_PARTMAN_VERSION=5.2.2
 ARG PG_VECTOR_VERSION=0.8.0
 
-FROM bitnami/postgresql:${PG_VERSION}
+FROM bitnamilegacy/postgresql:${PG_VERSION}
 
 ARG PG_VERSION
 ARG PG_PARTMAN_VERSION
@@ -10,7 +10,7 @@ ARG PG_VECTOR_VERSION
 
 USER root
 
-RUN install_packages wget build-essential
+RUN install_packages wget build-essential cmake git
 
 RUN cd /tmp && \
     # Downloads
@@ -32,6 +32,20 @@ RUN cd /tmp && \
     make && \
     make install && \
     cd .. && \
-    rm -rf pgvector.tar.gz pgvector-${PG_VECTOR_VERSION}
+    rm -rf pgvector.tar.gz pgvector-${PG_VECTOR_VERSION} && \
+    # Install pg_jieba
+    git clone --depth 1 https://github.com/jaiminpan/pg_jieba && \
+    cd pg_jieba && \
+    git submodule update --init --recursive && \
+    mkdir build && \
+    cd build && \
+    cmake -DPostgreSQL_INCLUDE_DIR=/opt/bitnami/postgresql/include \
+          -DPostgreSQL_TYPE_INCLUDE_DIR=/opt/bitnami/postgresql/include/server \
+          -DPostgreSQL_LIBRARY=/opt/bitnami/postgresql/lib/libpq.so \
+          .. && \
+    make && \
+    make install && \
+    cd ../.. && \
+    rm -rf pg_jieba
 
 USER ${UID}
